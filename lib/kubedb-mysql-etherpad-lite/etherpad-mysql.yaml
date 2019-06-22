@@ -1,0 +1,14 @@
+apiVersion: kubedb.com/v1alpha1
+kind: MySQL
+metadata:
+  name: etherpad-mysql
+spec:
+  version: "5.7.25"
+  storageType: Durable
+  storage:
+    storageClassName: "default"
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi

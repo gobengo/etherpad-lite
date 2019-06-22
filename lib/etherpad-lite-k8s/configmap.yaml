@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: etherpad
+data:
+  settings.json: |
+    {
+      "skinName":"colibris",
+      "title":"Etherpad on Kubernetes"
+    }

@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: etherpad
+data:
+  settings.json: |
+    {
+      "skinName":"colibris",
+      "title":"Etherpad on Kubernetes w/ MySQL",
+      "dbType": "${ETHERPAD_DB_TYPE:mysql}",
+      "dbSettings": {
+        "database": "${ETHERPAD_DB_DATABASE}",
+        "host": "${ETHERPAD_DB_HOST}",
+        "password": "${ETHERPAD_DB_PASSWORD}",
+        "user": "${ETHERPAD_DB_USER}"
+      }
+    }

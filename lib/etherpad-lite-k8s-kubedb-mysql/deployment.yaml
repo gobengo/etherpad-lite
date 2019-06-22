@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: etherpad
+spec:
+  template:
+    spec:
+      containers:
+      - name: etherpad
+        env:
+        - name: ETHERPAD_DB_TYPE
+          value: mysql
+        - name: ETHERPAD_DB_HOST
+          value: $(MYSQL_SERVICE)
+        - name: ETHERPAD_DB_DATABASE
+          value: etherpad_lite_db
+        - name: ETHERPAD_DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: etherpad-mysql-auth
+              key: username
+        - name: ETHERPAD_DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: etherpad-mysql-auth
+              key: password
+        volumeMounts:
+        - name: "config"
+          mountPath: "/opt/etherpad-lite/settings.json"
+          subPath: "settings.json"

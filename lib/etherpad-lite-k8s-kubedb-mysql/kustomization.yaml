@@ -1,0 +1,12 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+bases:
+- ../kubedb-mysql-etherpad-lite-with-init-script
+- ../etherpad-lite-k8s
+patchesStrategicMerge:
+- configmap.yaml
+- deployment.yaml
+images:
+- name: etherpad/etherpad
+  # This is required until 1.8 comes out to be able to use env vars in settings.json
+  newTag: latest

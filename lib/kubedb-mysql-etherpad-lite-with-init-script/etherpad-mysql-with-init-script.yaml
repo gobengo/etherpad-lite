@@ -1,0 +1,9 @@
+apiVersion: kubedb.com/v1alpha1
+kind: MySQL
+metadata:
+  name: etherpad-mysql
+spec:
+  init:
+    scriptSource:
+      configMap:
+        name: etherpad-mysql-init
