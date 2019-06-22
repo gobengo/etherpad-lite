@@ -17,3 +17,10 @@ or
 ```
 kubectl kustomize lib/etherpad-lite-k8s-kubedb-mysql/
 ```
+
+or (via URL, no git clone required!)
+
+```
+kubectl kustomize github.com/gobengo/etherpad-lite.git/lib/etherpad-lite-k8s
+```
+
