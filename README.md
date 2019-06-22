@@ -24,3 +24,17 @@ or (via URL, no git clone required!)
 kubectl kustomize github.com/gobengo/etherpad-lite.git/lib/etherpad-lite-k8s
 ```
 
+## Install on Kubernetes
+
+Assuming you have created a namespace named `my-etherpad-namespace` with something like `kubectl create ns my-etherpad-namespace`
+
+```
+kubectl kustomize github.com/gobengo/etherpad-lite.git/lib/etherpad-lite-k8s | kubectl apply -n my-etherpad-namespace -f -
+```
+
+If you don't have unix pipes:
+
+```
+kubectl -n my-etherpad-namespace apply -k github.com/gobengo/etherpad-lite.git/lib/etherpad-lite-k8s
+```
+
