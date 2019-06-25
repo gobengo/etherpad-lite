@@ -10,3 +10,5 @@ vars:
     name: etherpad-mysql
   fieldref:
     fieldpath: metadata.name
+configurations:
+- transformer-config-kubedb.yaml
