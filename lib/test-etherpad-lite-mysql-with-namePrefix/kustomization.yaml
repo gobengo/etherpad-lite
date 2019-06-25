@@ -1,3 +1,10 @@
 bases:
-- ../etherpad-lite-k8s-kubedb-mysql
+- ../permanent.cloud/etherpad-lite
 namePrefix: test-namePrefix-
+patchesJson6902:
+- target: 
+    group: networking.k8s.io
+    version: v1beta1
+    kind: Ingress
+    name: etherpad-lite
+  path: patch-ingress-host.yaml

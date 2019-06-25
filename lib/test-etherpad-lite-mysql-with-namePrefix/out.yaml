@@ -1,0 +1,113 @@
+apiVersion: v1
+data:
+  init.sql: |
+    create database `etherpad_lite_db`;
+    use `etherpad_lite_db`;
+
+    CREATE TABLE `store` (
+      `key` varchar(100) COLLATE utf8mb4_bin NOT NULL DEFAULT '',
+      `value` longtext COLLATE utf8mb4_bin NOT NULL,
+      PRIMARY KEY (`key`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+kind: ConfigMap
+metadata:
+  name: test-namePrefix-etherpad-mysql-init
+---
+apiVersion: v1
+data:
+  settings.json: |
+    {
+      "skinName":"colibris",
+      "title":"Etherpad on Kubernetes w/ MySQL",
+      "dbType": "${ETHERPAD_DB_TYPE:mysql}",
+      "dbSettings": {
+        "database": "${ETHERPAD_DB_DATABASE}",
+        "host": "${ETHERPAD_DB_HOST}",
+        "password": "${ETHERPAD_DB_PASSWORD}",
+        "user": "${ETHERPAD_DB_USER}"
+      }
+    }
+kind: ConfigMap
+metadata:
+  name: test-namePrefix-etherpad
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: test-namePrefix-etherpad
+spec:
+  ports:
+  - name: web
+    port: 80
+    targetPort: web
+  selector:
+    app: etherpad
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-namePrefix-etherpad
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: etherpad
+  template:
+    metadata:
+      labels:
+        app: etherpad
+    spec:
+      containers:
+      - env:
+        - name: ETHERPAD_DB_TYPE
+          value: mysql
+        - name: ETHERPAD_DB_HOST
+          value: test-namePrefix-etherpad-mysql
+        - name: ETHERPAD_DB_DATABASE
+          value: etherpad_lite_db
+        - name: ETHERPAD_DB_USER
+          valueFrom:
+            secretKeyRef:
+              key: username
+              name: test-namePrefix-etherpad-mysql-auth
+        - name: ETHERPAD_DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: test-namePrefix-etherpad-mysql-auth
+        image: etherpad/etherpad:latest
+        name: etherpad
+        ports:
+        - containerPort: 9001
+          name: web
+        volumeMounts:
+        - mountPath: /opt/etherpad-lite/settings.json
+          name: config
+          subPath: settings.json
+        - mountPath: /opt/etherpad/settings.json
+          name: config
+          subPath: settings.json
+      volumes:
+      - configMap:
+          name: test-namePrefix-etherpad
+        name: config
+---
+apiVersion: kubedb.com/v1alpha1
+kind: MySQL
+metadata:
+  name: test-namePrefix-etherpad-mysql
+spec:
+  init:
+    scriptSource:
+      configMap:
+        name: test-namePrefix-etherpad-mysql-init
+  storage:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi
+    storageClassName: default
+  storageType: Durable
+  terminationPolicy: WipeOut
+  version: 5.7.25

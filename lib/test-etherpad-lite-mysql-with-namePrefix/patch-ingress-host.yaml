@@ -1,0 +1,18 @@
+- op: test
+  path: /spec/rules
+  value: null
+- op: add
+  path: /tmp-ingress-rule
+  value:
+    http:
+      paths:
+      - path: /
+- op: move
+  from: /spec/backend
+  path: /tmp-ingress-rule/http/paths/0/backend
+- op: add
+  path: /spec/rules
+  value: []
+- op: move
+  from: /tmp-ingress-rule
+  path: /spec/rules/-

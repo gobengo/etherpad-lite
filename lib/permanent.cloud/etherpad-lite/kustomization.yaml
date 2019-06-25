@@ -1,0 +1,4 @@
+bases:
+- ../../etherpad-lite-k8s-kubedb-mysql
+resources:
+- ingress.yaml
