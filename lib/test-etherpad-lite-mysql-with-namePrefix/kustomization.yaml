@@ -6,5 +6,5 @@ patchesJson6902:
     group: networking.k8s.io
     version: v1beta1
     kind: Ingress
-    name: etherpad-lite
+    name: permanent-app-http
   path: patch-ingress-host.yaml
