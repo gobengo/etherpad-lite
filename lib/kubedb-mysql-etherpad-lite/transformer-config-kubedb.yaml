@@ -1,0 +1,12 @@
+namePrefix:
+- apiVersion: kubedb.com/v1alpha1
+  kind: MySQL
+  path: spec/init/scriptSource/configMap/name
+
+nameReference:
+- version: v1
+  kind: ConfigMap
+  fieldSpecs:
+  - version: kubedb.com/v1alpha1
+    kind: MySQL
+    path: spec/init/scriptSource

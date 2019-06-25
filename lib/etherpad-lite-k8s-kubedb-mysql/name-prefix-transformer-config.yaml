@@ -1,0 +1,4 @@
+namePrefix:
+- apiVersion: apps/v1
+  kind: Deployment
+  path: spec/template/spec/containers/env/valueFrom/secretKeyRef/name

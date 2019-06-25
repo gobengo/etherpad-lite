@@ -1,0 +1,3 @@
+bases:
+- ../etherpad-lite-k8s-kubedb-mysql
+namePrefix: test-namePrefix-
